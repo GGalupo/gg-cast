@@ -59,15 +59,43 @@ export default function Home({ latestEpisodes, olderEpisodes }: HomeProps) {
       </section>
       <section className={styles.olderEpisodes}>
           <h2>Older Podcasts</h2>
-          <ul>
-            {olderEpisodes.map(episode => {
-              return (
-                <li key={episode.id}>
-                  <a href="">{episode.title}</a>
-                </li>
-              )
-            })}
-          </ul>
+          <table cellSpacing={0}>
+            <thead>
+              <th></th>
+              <th>Podcast</th>
+              <th>Members</th>
+              <th>Date</th>
+              <th>Duration</th>
+              <th></th>
+            </thead>
+            <tbody>
+              {olderEpisodes.map(episode => {
+                return (
+                  <tr key={episode.id}>
+                    <td>
+                      <Image 
+                        width={120}
+                        height={120}
+                        src={episode.thumbnail}
+                        alt={episode.title}
+                        objectFit="cover"/>
+                    </td>
+                    <td>
+                      <a href="">{episode.title}</a>
+                    </td>
+                    <td>{episode.members}</td>
+                    <td>{episode.publishedAt}</td>
+                    <td>{episode.durationAsString}</td>
+                    <td>
+                      <button type="button">
+                        <img src="/play-green.svg" alt="Play episode"/>
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
       </section>
     </div>
   )
@@ -88,7 +116,7 @@ export const getStaticProps: GetStaticProps = async () => {
       title: episode.title,
       thumbnail: episode.thumbnail,
       members: episode.members,
-      publishedAt: format(parseISO(episode.published_at), 'MMM. d Y', { locale: enUS }),
+      publishedAt: format(parseISO(episode.published_at), 'MMM d Y', { locale: enUS }),
       duration: Number(episode.file.duration),
       durationAsString: convertDurationToTimeString(Number(episode.file.duration)),
       description: episode.description,
