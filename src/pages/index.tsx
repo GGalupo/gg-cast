@@ -4,6 +4,8 @@ import enUS from 'date-fns/locale/en-US'
 import { api } from '../services/api'
 import { convertDurationToTimeString } from '../utils/durationToTimeString'
 
+import styles from './home.module.scss'
+
 type Episode = {
   id: string
   title: string
@@ -17,14 +19,37 @@ type Episode = {
 }
 
 type HomeProps = {
-  episodes: Episode[]
+  latestEpisodes: Episode[],
+  olderEpisodes: Episode[]
 }
 
-export default function Home(props: HomeProps) {
+export default function Home({ latestEpisodes, olderEpisodes }: HomeProps) {
   return (
-    <div>
-      <h1>Index</h1>
-      <p>{JSON.stringify(props.episodes)}</p>
+    <div className={styles.homePage}>
+      <section className={styles.latestEpisodes}>
+        <h2>New Podcasts</h2>
+        <ul>
+          {latestEpisodes.map(episode => {
+            return (
+              <li key={episode.id}>
+                <a href="">{episode.title}</a>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+      <section className={styles.olderEpisodes}>
+          <h2>Older Podcasts</h2>
+          <ul>
+            {olderEpisodes.map(episode => {
+              return (
+                <li key={episode.id}>
+                  <a href="">{episode.title}</a>
+                </li>
+              )
+            })}
+          </ul>
+      </section>
     </div>
   )
 }
@@ -52,9 +77,13 @@ export const getStaticProps: GetStaticProps = async () => {
     }
   })
 
+  const latestEpisodes = episodes.slice(0, 2)
+  const olderEpisodes = episodes.slice(2, episodes.length)
+
   return {
     props: {
-      episodes,
+      latestEpisodes,
+      olderEpisodes
     },
     revalidate: 60 * 60 * 6,
   }
