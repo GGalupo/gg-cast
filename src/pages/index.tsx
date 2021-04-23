@@ -4,6 +4,8 @@ import enUS from 'date-fns/locale/en-US'
 import { api } from '../services/api'
 import { convertDurationToTimeString } from '../utils/durationToTimeString'
 
+import Image from 'next/image'
+
 import styles from './home.module.scss'
 
 type Episode = {
@@ -32,7 +34,24 @@ export default function Home({ latestEpisodes, olderEpisodes }: HomeProps) {
           {latestEpisodes.map(episode => {
             return (
               <li key={episode.id}>
-                <a href="">{episode.title}</a>
+                <Image 
+                  width={192}
+                  height={192}
+                  src={episode.thumbnail}
+                  alt={episode.title}
+                  objectFit="cover"
+                  />
+
+                <div className={styles.episodeDetails}>
+                  <a href="">{episode.title}</a>
+                  <p>{episode.members}</p>
+                  <span>{episode.publishedAt}</span>
+                  <span>{episode.durationAsString}</span>
+                </div>
+
+                <button type="button">
+                  <img src="/play-green.svg" alt="Play episode"/>
+                </button>
               </li>
             )
           })}
