@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Slider from 'rc-slider'
 
@@ -9,7 +9,26 @@ import styles from './styles.module.scss'
 
 
 export function Player() {
-    const { episodeList, currentEpisodeIndex } = useContext(PlayerContext)
+    const audioRef = useRef<HTMLAudioElement>(null)
+
+    const { episodeList,
+        currentEpisodeIndex,
+        isPlaying,
+        setPlayingState,
+        togglePlay
+    } = useContext(PlayerContext)
+
+    useEffect(() => {
+        if(!audioRef.current) {
+            return
+        }
+
+        if(isPlaying) {
+            audioRef.current.play()
+        } else {
+            audioRef.current.pause()
+        }
+    }, [isPlaying])
 
     const episode = episodeList[currentEpisodeIndex]
 
@@ -55,6 +74,16 @@ export function Player() {
                     </div>
                     <span>00:00</span>
                 </div>
+                
+                { episode && (
+                    <audio
+                        src={episode.url}
+                        ref={audioRef}
+                        autoPlay
+                        onPlay={() => { setPlayingState(true) }}
+                        onPause={() => { setPlayingState(false) }}
+                    />
+                )}
 
                 <div className={styles.buttons}>
                     <button type="button" disabled={!episode}>
@@ -63,8 +92,13 @@ export function Player() {
                     <button type="button" disabled={!episode}>
                         <img src="/play-previous.svg" alt="Play Previous"/>
                     </button>
-                    <button type="button" disabled={!episode} className={styles.playButton}>
-                        <img src="/play.svg" alt="Play"/>
+                    <button
+                        type="button"
+                        disabled={!episode}
+                        className={styles.playButton}
+                        onClick={togglePlay}
+                    >
+                        <img src={ isPlaying ? '/pause.svg' : '/play.svg'} alt="Play/Pause"/>
                     </button>
                     <button type="button" disabled={!episode}>
                         <img src="/play-next.svg" alt="Play Next"/>
