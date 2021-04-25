@@ -14,6 +14,8 @@ export function Player() {
     const { episodeList,
         currentEpisodeIndex,
         isPlaying,
+        hasNext,
+        hasPrevious,
         setPlayingState,
         playNext,
         playPrevious,
@@ -91,7 +93,7 @@ export function Player() {
                     <button type="button" disabled={!episode}>
                         <img src="/shuffle.svg" alt="Shuffle"/>
                     </button>
-                    <button type="button" onClick={playPrevious} disabled={!episode}>
+                    <button type="button" onClick={playPrevious} disabled={!episode || !hasPrevious}>
                         <img src="/play-previous.svg" alt="Play Previous"/>
                     </button>
                     <button
@@ -102,7 +104,7 @@ export function Player() {
                     >
                         <img src={ isPlaying ? '/pause.svg' : '/play.svg'} alt="Play/Pause"/>
                     </button>
-                    <button type="button" onClick={playNext} disabled={!episode}>
+                    <button type="button" onClick={playNext} disabled={!episode || !hasNext}>
                         <img src="/play-next.svg" alt="Play Next"/>
                     </button>
                     <button type="button" disabled={!episode}>
