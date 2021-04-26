@@ -100,7 +100,7 @@ export default function Home({ latestEpisodes, olderEpisodes }: HomeProps) {
                       </Link>
                     </td>
                     <td>{episode.members}</td>
-                    <td>{episode.publishedAt}</td>
+                    <td style={{ width: 100 }}>{episode.publishedAt}</td>
                     <td>{episode.durationAsString}</td>
                     <td>
                       <button
